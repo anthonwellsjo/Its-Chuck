@@ -7,74 +7,54 @@ import linkedin from '../img/in.png';
 import repo from '../img/repo.png';
 import git from '../img/git.png';
 
-
+let speechSynthesis: SpeechSynthesis;
+let angryUtterance: SpeechSynthesisUtterance;
+let utterance: SpeechSynthesisUtterance;
 let chuckInteger = 0;
 let firstTime = true;
 let hasCalmedDown = true;
+const ANGRY_LINES = ["I wouldn't interrupt if I were you.", "Damn you're annoying!.", "Wait the fuck up while I'm speaking!", "I'm coming over to beat you up!"]
 
 export default function Home() {
 
 
+    const [showModal, setShowModal] = useState(false);
+    const [isBusy, setIsBusy] = useState(true);
     const [chuck, setChuck] = useState({
         show: false,
         text: "That's right, punch my face and I'll tell you jokes.",
         isAngry: false,
         walkAway: false
     })
-    const [showModal, setShowModal] = useState(false);
-    const [isBusy, setIsBusy] = useState(true);
 
-    const ANGRY_LINES = ["I wouldn't interrupt if I were you.", "Damn you're annoying!.", "Wait the fuck up while I'm speaking!", "I'm coming over to beat you up!"]
-    let x: number;
 
-    let synthesis = window.speechSynthesis;
-    const voices = synthesis.getVoices();
-    let angryUtterance = new SpeechSynthesisUtterance;
-    console.log(voices[0])
-    angryUtterance.voice = voices[0];
-    angryUtterance.text = ANGRY_LINES[chuckInteger]
-    angryUtterance.volume = 10;
-    angryUtterance.rate = 0.8;
-    angryUtterance.pitch = 0;
-    angryUtterance.addEventListener("end", () => {
-        console.log("on angrrryyyyyyyyyyy end event!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        if (!chuck.walkAway) {
-            setChuck(prev => ({ ...prev, isAngry: false }))
-            hasCalmedDown = true;
-        } if (chuck.walkAway) {
-
-        }
-    })
-    let utterance = new SpeechSynthesisUtterance;
-    utterance.voice = voices[0];
-    utterance.text = chuck.text;
-    utterance.volume = 10;
-    utterance.rate = 0.8;
-    utterance.pitch = 0;
-    utterance.addEventListener("end", () => {
-        console.log("on end event!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        getRandomJoke();
-        if (firstTime) { firstTime = false };
-    })
 
 
 
     //Event handlers
 
     const onChuckClickedEventHandler = async () => {
-        if (!chuck.walkAway) {
-            if (!synthesis.speaking) {
-                await getRandomJoke();
-                synthesis.speak(utterance);
+        if (firstTime) {
+            if (!speechSynthesis.speaking) {
+                utterance.text = "That's right, punch my face and I'll tell you jokes.";
+                speechSynthesis.speak(utterance);
             } else {
+                return;
+            }
+        }
+        if (!chuck.walkAway) {
+            if (!speechSynthesis.speaking) {
+                await getRandomJoke();
+                speechSynthesis.speak(utterance);
+            } else if (speechSynthesis.speaking) {
                 if (!chuck.isAngry && !firstTime) {
                     console.log("set gtfo")
-                    synthesis.cancel();
+                    speechSynthesis.cancel();
                     setChuck(prev => ({ ...prev, isAngry: true }));
                     hasCalmedDown = false
                 } else if (chuck.isAngry) {
                     return;
-                } else if (!firstTime) { synthesis.cancel(); }
+                } else if (!firstTime) { speechSynthesis.cancel(); }
             }
         } else {
         }
@@ -91,6 +71,7 @@ export default function Home() {
             })
             .then((myJson) => {
                 setChuck(prev => ({ ...prev, text: myJson.value }));
+                utterance.text = myJson.value;
                 console.log(myJson);
             });
 
@@ -121,6 +102,39 @@ export default function Home() {
     //Life Cyclesoke();
 
     useEffect(() => {
+        speechSynthesis = window.speechSynthesis;
+        const voices = speechSynthesis.getVoices();
+        angryUtterance = new SpeechSynthesisUtterance;
+        console.log(voices[0])
+        angryUtterance.voice = voices[0];
+        angryUtterance.text = ANGRY_LINES[chuckInteger]
+        angryUtterance.volume = 10;
+        angryUtterance.rate = 0.8;
+        angryUtterance.pitch = 0;
+        angryUtterance.addEventListener("end", () => {
+            console.log("on angrrryyyyyyyyyyy end event!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            if (!chuck.walkAway) {
+                setChuck(prev => ({ ...prev, isAngry: false }))
+                hasCalmedDown = true;
+            } if (chuck.walkAway) {
+
+            }
+        })
+        utterance = new SpeechSynthesisUtterance;
+        utterance.voice = voices[0];
+        utterance.text = chuck.text;
+        utterance.volume = 10;
+        utterance.rate = 0.8;
+        utterance.pitch = 0;
+        utterance.addEventListener("end", () => {
+            console.log("on end event!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            getRandomJoke();
+            if (firstTime) { firstTime = false };
+        })
+
+    }, [])
+
+    useEffect(() => {
 
         if (isBusy) {
             setTimeout(() => {
@@ -137,7 +151,8 @@ export default function Home() {
 
 
     if (chuck.isAngry && !hasCalmedDown) {
-        synthesis.speak(angryUtterance);
+        angryUtterance.text = ANGRY_LINES[chuckInteger];
+        speechSynthesis.speak(angryUtterance);
         if (chuckInteger < 3) { chuckInteger++ } else {
             setChuck(prev => ({ ...prev, walkAway: true }));
             setTimeout(() => {
