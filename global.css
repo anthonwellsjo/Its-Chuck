@@ -14,6 +14,15 @@ header {
   border: 3px solid black;
   box-shadow: 5px 6px 10px rgb(197, 197, 197);
 }
+@media (max-width: 525px) {
+  header {
+    border: 2px solid black;
+    top: -45px;
+  }
+  header h1 {
+    margin-bottom: -10px;
+  }
+}
 
 h1 {
   font-family: Pacifico;
@@ -34,6 +43,13 @@ h1 {
   overflow: hidden;
   transition: opacity 0.3s, box-shadow 0.1s, background-color 5s;
   opacity: 0;
+}
+
+@media (max-width: 525px) {
+  .frame {
+    width: 300px;
+    height: 300px;
+  }
 }
 
 .frame:hover {
@@ -72,12 +88,19 @@ h1 {
   z-index: 500;
   background-color: white;
   border: solid 3px black;
-  transition: transform .3s;
+  transition: transform 0.3s;
+}
+
+@media (max-width: 525px) {
+  .pissedOfModal {
+    width: 300px;
+    height: 350px;
+  }
 }
 
 .hideModal {
-    transform: translateY(-500px);
-    transition: transform .3s;
+  transform: translateY(-500px);
+  transition: transform 0.3s;
 }
 .modalHeader {
   display: flex;
@@ -95,10 +118,9 @@ h1 {
   width: 50px;
   border-left: solid 3px black;
 }
-.chuckModalPic{
-    width: 800px;
-    margin-right: 20px;;
-    
+.chuckModalPic {
+  width: 800px;
+  margin-right: 20px;
 }
 
 .modalPicCrop {
@@ -143,9 +165,8 @@ h2 {
 }
 
 .hideBackDrop {
-  transform: translateY(-100%);
-  transition: transform .3s;
-  
+  transform: translateY(-103%);
+  transition: transform 0.3s;
 }
 
 /* CHUCK ANIMATION */
@@ -164,4 +185,23 @@ h2 {
 
 .chuckAnimWrapper {
   transition: transform 10s;
+}
+
+.contactBar {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+
+.iconImg {
+  filter: grayscale(90%);
+  opacity: 0.6;
+  width: 30px;
+  height: 30px;
+  transition: opacity 0.3s;
+}
+
+.iconImg:hover {
+  opacity: 1;
+  filter: grayscale(0);
 }

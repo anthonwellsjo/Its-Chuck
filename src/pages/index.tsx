@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react"
 import { Link } from 'gatsby';
 import chuckImg from '../img/chuck.png';
 import BusyAnimation from "../components/BusyAnimation";
+import whatsapp from '../img/app.png';
+import linkedin from '../img/in.png';
+import repo from '../img/repo.png';
+import git from '../img/git.png';
 
 
 let chuckInteger = 0;
@@ -26,6 +30,7 @@ export default function Home() {
     let synthesis = window.speechSynthesis;
     const voices = synthesis.getVoices();
     let angryUtterance = new SpeechSynthesisUtterance;
+    console.log(voices[0])
     angryUtterance.voice = voices[0];
     angryUtterance.text = ANGRY_LINES[chuckInteger]
     angryUtterance.volume = 10;
@@ -92,6 +97,27 @@ export default function Home() {
 
     }
 
+    //contact functions
+
+    const icons = {
+        google: "mailto:anthonwellsjo@gmail.com",
+        git: "https://github.com/anthonwellsjo/",
+        linkedIn: "https://www.linkedin.com/in/anthonwellsjo",
+        whatsApp: "https://api.whatsapp.com/send?phone=393396479127"
+    }
+
+
+    function openInNewTab(url: string) {
+        var win = window.open(url, '_blank');
+        if (win !== null) {
+            win.focus();
+        }
+    }
+    const onIconClicked = type => {
+        openInNewTab(type);
+    }
+
+
     //Life Cyclesoke();
 
     useEffect(() => {
@@ -157,7 +183,13 @@ export default function Home() {
                     </div>
                 </div >
             </div>
-            <div className={showModal ? "showBackDrop" : "hideBackDrop"} style={{ backdropFilter: "blur(4px)", position: "absolute", top: "0", left: "0", bottom: "0", right: "0", transition: "transform .5s", borderBottom: "solid black 3px" }}></div>
+            <div className="contactBar">
+                <img src={repo} className="iconImg" onClick={() => onIconClicked(icons.google)}></img>
+                <img src={linkedin} className="iconImg" onClick={() => onIconClicked(icons.linkedIn)}></img>
+                <img src={git} className="iconImg" onClick={() => onIconClicked(icons.git)}></img>
+                <img src={whatsapp} className="iconImg" onClick={() => onIconClicked(icons.whatsApp)}></img>
+            </div>
+            <div className={showModal ? "showBackDrop" : "hideBackDrop"} style={{ backdropFilter: "blur(4px)", position: "absolute", top: "0", left: "0", bottom: "0", right: "0", transition: "transform .5s", boxShadow: "4px 6px 15px black" }}></div>
         </>
     )
 }
