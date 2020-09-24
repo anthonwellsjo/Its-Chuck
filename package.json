@@ -11,14 +11,24 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@types/classnames": "^2.2.10",
+    "@types/react-css-modules": "^4.6.2",
+    "classnames": "^2.2.6",
     "gatsby": "^2.24.63",
+    "gatsby-plugin-google-fonts": "^1.0.1",
+    "gatsby-plugin-typescript": "^2.4.20",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"
   },
   "devDependencies": {
+    "@hot-loader/react-dom": "^16.8.6",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "eslint": "^7.9.0",
     "prettier": "2.1.1"
   },
   "repository": {
