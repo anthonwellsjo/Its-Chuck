@@ -7,7 +7,7 @@
 module.exports = {
 
   /* Your site config here */
-  pathPrefix: "/reponame",
+  pathPrefix: "/Its-Chuck",
   plugins: [
     {
       resolve: `gatsby-plugin-google-fonts`,
