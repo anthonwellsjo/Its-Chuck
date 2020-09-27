@@ -290,6 +290,19 @@ h5 {
   .consoleBtn {
     transform: scale(0.8);
   }
+  .chuckConsoleContainer {
+    width: 98%;
+    height: 60%;
+    right: 0;
+    left: 0;
+    bottom: 0;
+  }
+  .chuckConsoleHolder {
+    width: 100%;
+    right: 0;
+    left: 0;
+    bottom: 0;
+  }
 }
 
 .consoleBtn:hover {
@@ -297,10 +310,15 @@ h5 {
   transition: background-color 0.3s;
 }
 
+@media (min-width: 526px) {
+  .chuckConsoleContainer {
+    width: 50%;
+    height: 70px;
+  }
+}
+
 .chuckConsoleContainer {
   position: absolute;
-  width: 50%;
-  height: 70px;
   border: 3px double grey;
   background-color: black;
   overflow: hidden;

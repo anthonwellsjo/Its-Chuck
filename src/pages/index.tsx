@@ -9,6 +9,7 @@ import git from '../img/git.png';
 import Modal from "../components/modal/modal";
 import Chuck from "../components/chuck/chuck";
 import ChuckConsole from "../components/chuckConsole/chuckConsole";
+import ContactBar from "../components/contactBar/contactBar";
 
 let consoleArray: Array<string> = ["1", "2", "3", "4"];
 let speechSynthesis: SpeechSynthesis;
@@ -59,6 +60,7 @@ export default function Home() {
                     speechSynthesis.cancel();
                     updateChuckConsole("speechSynthesis.cancel()");
                     setChuck(prev => ({ ...prev, isAngry: true }));
+                    updateChuckConsole("chuck.isAngry = true");
                     hasCalmedDown = false
                 } else if (chuck.isAngry) {
                     updateChuckConsole("Can't click while Chuck is angry.")
@@ -74,11 +76,12 @@ export default function Home() {
 
     const updateChuckConsole = (line: string) => {
         console.log("update chuck");
+
         for (let i = 0; i < consoleData.length - 1; i++) {
             console.log(i, "replacing", consoleArray[i], "with", consoleArray[i + 1])
             consoleArray[i] = consoleArray[i + 1];
         }
-        consoleArray[consoleArray.length - 1] = consoleCount.toString() + ": " + line;
+        consoleArray.push(consoleCount.toString() + ": " + line);
         consoleCount++;
         console.log("consoleArray", consoleArray);
         setConsoleData(consoleArray);
@@ -133,9 +136,12 @@ export default function Home() {
         angryUtterance.rate = 0.8;
         angryUtterance.pitch = 0;
         angryUtterance.addEventListener("end", () => {
+            updateChuckConsole("chuck.isSpeaking = false");
             console.log("on angrrryyyyyyyyyyy end event!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             if (!chuck.walkAway) {
                 setChuck(prev => ({ ...prev, isAngry: false }))
+                updateChuckConsole("chuck.isAngry = false");
+                updateChuckConsole("chuck.isAngry = false");
                 hasCalmedDown = true;
             } if (chuck.walkAway) {
 
@@ -148,13 +154,17 @@ export default function Home() {
         utterance.rate = 0.8;
         utterance.pitch = 0;
         utterance.addEventListener("start", () => {
+            updateChuckConsole("chuck.isSpeaking = true");
             updateChuckConsole(utterance.text);
-            setChuck(prev => ({ ...prev, isSpeaking: true }))
+            setChuck(prev => ({ ...prev, isSpeaking: true }));
+
         })
         utterance.addEventListener("end", () => {
+            updateChuckConsole("chuck.isSpeaking = false");
             console.log("on end event!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             if (firstTime) { firstTime = false };
-            setChuck(prev => ({ ...prev, isSpeaking: false }))
+            setChuck(prev => ({ ...prev, isSpeaking: false }));
+
         })
 
     }, [])
@@ -180,18 +190,27 @@ export default function Home() {
         speechSynthesis.speak(angryUtterance);
         if (chuckInteger < 3) { chuckInteger++ } else {
             setChuck(prev => ({ ...prev, walkAway: true }));
+            updateChuckConsole("chuck.walkAway = true");
             setTimeout(() => {
                 setShowModal(true);
             }, 2000);
         }
+        updateChuckConsole("chuckHasCalmedDown = true");
         hasCalmedDown = true;
     }
 
 
     return (
         <>
-
-            <Modal showModal={showModal} click={() => setShowModal(false)} header="Cheers!">You pissed off the Chuck! Thanks for visiting. Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur quo debitis ex odit blanditiis perferendis modi repellat ratione suscipit ea, est obcaecati iste. Dolorem illum pariatur nisi ipsam, obcaecati quibusdam.</Modal>
+            <Modal showModal={showModal} click={() => setShowModal(false)} header="Cheers!">
+                You pissed off the Chuck! Thanks for visiting. <ContactBar
+                show={chuck.show}
+                googleClicked={() => onIconClicked(icons.google)}
+                linkedInClicked={() => onIconClicked(icons.linkedIn)}
+                gitClicked={() => onIconClicked(icons.git)}
+                whatsappClicked={() => onIconClicked(icons.whatsApp)}
+                />   
+            </Modal>
 
             <BusyAnimation in={isBusy} />
             <div className="pageContainer">
@@ -201,12 +220,13 @@ export default function Home() {
                 <Chuck show={chuck.show} isAngry={chuck.isAngry} isSpeaking={chuck.isSpeaking} walkAway={chuck.walkAway} click={() => onChuckClickedEventHandler()} />
             </div>
             <ChuckConsole show={chuck.show}>{consoleData}</ChuckConsole>
-            <div className="contactBar" style={chuck.show ? { opacity: "1" } : { opacity: "0" }}>
-                <img src={repo} className="iconImg" onClick={() => onIconClicked(icons.google)}></img>
-                <img src={linkedin} className="iconImg" onClick={() => onIconClicked(icons.linkedIn)}></img>
-                <img src={git} className="iconImg" onClick={() => onIconClicked(icons.git)}></img>
-                <img src={whatsapp} className="iconImg" onClick={() => onIconClicked(icons.whatsApp)}></img>
-            </div>
+            <ContactBar
+                show={chuck.show}
+                googleClicked={() => onIconClicked(icons.google)}
+                linkedInClicked={() => onIconClicked(icons.linkedIn)}
+                gitClicked={() => onIconClicked(icons.git)}
+                whatsappClicked={() => onIconClicked(icons.whatsApp)}
+                />            
             <div className={showModal ? "showBackDrop backDrop" : "hideBackDrop backDrop"}></div>
         </>
     )

@@ -6,6 +6,7 @@ interface Props {
     click: any,
     header: string,
     children: string,
+    element?: HTMLElement
 }
 
 
@@ -28,6 +29,7 @@ const Modal = (props: Props) => {
                 </div>
                 <div className="modalContentContainer">
                     <p>{props.children}</p>
+                    {props.element}
                 </div>
             </section>
         </div>
