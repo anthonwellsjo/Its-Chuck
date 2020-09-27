@@ -14,6 +14,8 @@ module.exports = {
       options: {
         fonts: [
           `Pacifico`,
+          `Montserrat`,
+          `Courier Prime`
         ],
         display: 'swap'
       }

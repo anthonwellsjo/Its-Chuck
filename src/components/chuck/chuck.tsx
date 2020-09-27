@@ -30,7 +30,7 @@ const Chuck = (props: Props) => {
 
 
     return (
-        <div className={props.show ? "frame show" : "frame"} style={props.isAngry ? { backgroundColor: "red", transition: "background-color 5s" } : { backgroundColor: "white", transition: "background-color 5s" }}>
+        <div className={props.show ? "frame show" : "frame"} style={props.isAngry ? { backgroundColor: "red"} : { backgroundColor: "white"}}>
             <div className="chuckAnimWrapper" style={wrapperStyles}>
                 <img style={imgStyles} className="chuck" onClick={props.click} src={chuckImg}></img>
             </div>

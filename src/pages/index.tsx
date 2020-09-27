@@ -8,7 +8,9 @@ import repo from '../img/repo.png';
 import git from '../img/git.png';
 import Modal from "../components/modal/modal";
 import Chuck from "../components/chuck/chuck";
+import ChuckConsole from "../components/chuckConsole/chuckConsole";
 
+let consoleArray: Array<string> = ["1","2","3","4"];
 let speechSynthesis: SpeechSynthesis;
 let angryUtterance: SpeechSynthesisUtterance;
 let utterance: SpeechSynthesisUtterance;
@@ -22,6 +24,7 @@ export default function Home() {
 
     const [showModal, setShowModal] = useState(false);
     const [isBusy, setIsBusy] = useState(true);
+    const [consoleData, setConsoleData] = useState(["1", "2", "3", "4"]);
     const [chuck, setChuck] = useState({
         show: false,
         text: "That's right, punch my face and I'll tell you jokes.",
@@ -41,6 +44,7 @@ export default function Home() {
             if (!speechSynthesis.speaking) {
                 utterance.text = "That's right, punch my face and I'll tell you jokes.";
                 speechSynthesis.speak(utterance);
+                updateChuckConsole("That's right, punch my face and I'll tell you jokes.")
             } else {
                 return;
             }
@@ -51,11 +55,12 @@ export default function Home() {
                 speechSynthesis.speak(utterance);
             } else if (speechSynthesis.speaking) {
                 if (!chuck.isAngry && !firstTime) {
-                    console.log("set gtfo")
                     speechSynthesis.cancel();
+                    updateChuckConsole("speechSynthesis.cancel()");
                     setChuck(prev => ({ ...prev, isAngry: true }));
                     hasCalmedDown = false
                 } else if (chuck.isAngry) {
+                    updateChuckConsole("Can't click while Chuck is angry.")
                     return;
                 } else if (!firstTime) { speechSynthesis.cancel(); }
             }
@@ -66,8 +71,21 @@ export default function Home() {
 
     //functions
 
+    const updateChuckConsole = (line: string) => {
+        console.log("update chuck");
+        for (let i = 0; i < consoleData.length - 1; i++) {
+            console.log(i,"replacing", consoleArray[i], "with", consoleArray[i+1])
+            consoleArray[i]=consoleArray[i+1];
+        }
+        consoleArray[consoleArray.length-1] = line;
+        console.log("consoleArray", consoleArray);
+        setConsoleData(consoleArray);
+        
+    }
+
     const getRandomJoke = async () => {
         console.log("get random joke");
+        updateChuckConsole("fetching from API: https://api.chucknorris.io/jokes/random...");
         await fetch("https://api.chucknorris.io/jokes/random")
             .then((response) => {
                 return response.json();
@@ -128,11 +146,11 @@ export default function Home() {
         utterance.rate = 0.8;
         utterance.pitch = 0;
         utterance.addEventListener("start", () => {
+            updateChuckConsole(utterance.text);
             setChuck(prev => ({ ...prev, isSpeaking: true }))
         })
         utterance.addEventListener("end", () => {
             console.log("on end event!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            getRandomJoke();
             if (firstTime) { firstTime = false };
             setChuck(prev => ({ ...prev, isSpeaking: false }))
         })
@@ -175,12 +193,13 @@ export default function Home() {
 
             <BusyAnimation in={isBusy} />
             <div className="pageContainer">
-                <header>
+                <header style={chuck.show ? { opacity: "1" } : { opacity: "0" }}>
                     <h1>It's Chuck!</h1>
                 </header>
                 <Chuck show={chuck.show} isAngry={chuck.isAngry} isSpeaking={chuck.isSpeaking} walkAway={chuck.walkAway} click={() => onChuckClickedEventHandler()} />
             </div>
-            <div className="contactBar">
+            <ChuckConsole show={chuck.show}>{consoleData}</ChuckConsole>
+            <div className="contactBar" style={chuck.show ? { opacity: "1" } : { opacity: "0" }}>
                 <img src={repo} className="iconImg" onClick={() => onIconClicked(icons.google)}></img>
                 <img src={linkedin} className="iconImg" onClick={() => onIconClicked(icons.linkedIn)}></img>
                 <img src={git} className="iconImg" onClick={() => onIconClicked(icons.git)}></img>
