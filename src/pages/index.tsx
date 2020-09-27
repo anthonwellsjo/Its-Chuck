@@ -10,13 +10,14 @@ import Modal from "../components/modal/modal";
 import Chuck from "../components/chuck/chuck";
 import ChuckConsole from "../components/chuckConsole/chuckConsole";
 
-let consoleArray: Array<string> = ["1","2","3","4"];
+let consoleArray: Array<string> = ["1", "2", "3", "4"];
 let speechSynthesis: SpeechSynthesis;
 let angryUtterance: SpeechSynthesisUtterance;
 let utterance: SpeechSynthesisUtterance;
 let chuckInteger = 0;
 let firstTime = true;
 let hasCalmedDown = true;
+let consoleCount: number = 0;
 const ANGRY_LINES = ["I wouldn't interrupt if I were you.", "Damn you're annoying!.", "Wait the fuck up while I'm speaking!", "I'm coming over to beat you up!"]
 
 export default function Home() {
@@ -74,13 +75,14 @@ export default function Home() {
     const updateChuckConsole = (line: string) => {
         console.log("update chuck");
         for (let i = 0; i < consoleData.length - 1; i++) {
-            console.log(i,"replacing", consoleArray[i], "with", consoleArray[i+1])
-            consoleArray[i]=consoleArray[i+1];
+            console.log(i, "replacing", consoleArray[i], "with", consoleArray[i + 1])
+            consoleArray[i] = consoleArray[i + 1];
         }
-        consoleArray[consoleArray.length-1] = line;
+        consoleArray[consoleArray.length - 1] = consoleCount.toString() + ": " + line;
+        consoleCount++;
         console.log("consoleArray", consoleArray);
         setConsoleData(consoleArray);
-        
+
     }
 
     const getRandomJoke = async () => {

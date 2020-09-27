@@ -42,7 +42,8 @@ h1 {
   width: 400px;
   height: 400px;
   overflow: hidden;
-  transition: opacity 0.3s, box-shadow 0.1s, background-color 3s, box-shadow 0.1s;
+  transition: opacity 0.3s, box-shadow 0.1s, background-color 3s,
+    box-shadow 0.1s;
   opacity: 0;
 }
 
@@ -257,17 +258,17 @@ h5 {
   height: 0;
   opacity: 0;
   transform: translateY(200px);
-  transition: transform 0.3s, opacity .3s;
+  transition: transform 0.3s, opacity 0.3s;
 }
 
 .chuckConsoleHolder {
   position: absolute;
-  height:100%;
-  width:100%;
+  top: 70%;
+  width: 100%;
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: -100;
 }
 
 .consoleBtn {
@@ -278,22 +279,26 @@ h5 {
   border-radius: 110px;
   padding: 5px;
   font-size: 20px;
-  margin-top: 600px;
-  z-index: 100;
+  z-index: 999;
   outline: none;
   position: absolute;
   background-color: white;
-  transition: background-color .3s, transform .3s, opacity .3s;
+  transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
 }
 
-.consoleBtn:hover{
+@media (max-width: 525px) {
+  .consoleBtn {
+    transform: scale(0.8);
+  }
+}
+
+.consoleBtn:hover {
   background-color: wheat;
-  transition: background-color .3s;
+  transition: background-color 0.3s;
 }
 
 .chuckConsoleContainer {
   position: absolute;
-  margin-top: 550px;
   width: 50%;
   height: 70px;
   border: 3px double grey;
