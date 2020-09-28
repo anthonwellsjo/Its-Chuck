@@ -11,14 +11,14 @@ import Chuck from "../components/chuck/chuck";
 import ChuckConsole from "../components/chuckConsole/chuckConsole";
 import ContactBar from "../components/contactBar/contactBar";
 
-let consoleArray: Array<string> = ["1", "2", "3", "4"];
+let consoleArray: Array<string> = ["1: Initializing App", "2: Showing Loader", "3: Showing Chuck", "4: Ready for User Interaction"];
 let speechSynthesis: SpeechSynthesis;
 let angryUtterance: SpeechSynthesisUtterance;
 let utterance: SpeechSynthesisUtterance;
 let chuckInteger = 0;
 let firstTime = true;
 let hasCalmedDown = true;
-let consoleCount: number = 0;
+let consoleCount: number = 5;
 const ANGRY_LINES = ["I wouldn't interrupt if I were you.", "Damn you're annoying!.", "Wait the fuck up while I'm speaking!", "I'm coming over to beat you up!"]
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
 
     const [showModal, setShowModal] = useState(false);
     const [isBusy, setIsBusy] = useState(true);
-    const [consoleData, setConsoleData] = useState(["1", "2", "3", "4"]);
+    const [consoleData, setConsoleData] = useState(["1: Initializing App", "2: Showing Loader", "3: Showing Chuck", "4: Ready for User Interaction"]);
     const [chuck, setChuck] = useState({
         show: false,
         text: "That's right, punch my face and I'll tell you jokes.",
@@ -202,14 +202,12 @@ export default function Home() {
 
     return (
         <>
-            <Modal showModal={showModal} click={() => setShowModal(false)} header="Cheers!">
-                You pissed off the Chuck! Thanks for visiting. <ContactBar
-                show={chuck.show}
+            <Modal showModal={showModal} click={() => setShowModal(false)} header="Cheers!" element={<ContactBar show={chuck.show}
                 googleClicked={() => onIconClicked(icons.google)}
                 linkedInClicked={() => onIconClicked(icons.linkedIn)}
                 gitClicked={() => onIconClicked(icons.git)}
-                whatsappClicked={() => onIconClicked(icons.whatsApp)}
-                />   
+                whatsappClicked={() => onIconClicked(icons.whatsApp)} />}>
+                You pissed off the Chuck! Thanks for visiting. My name is Anthon and this App was built around the <a href="http://www.icndb.com/api/">Internet Chuck Norris Database Api</a>
             </Modal>
 
             <BusyAnimation in={isBusy} />
@@ -226,7 +224,7 @@ export default function Home() {
                 linkedInClicked={() => onIconClicked(icons.linkedIn)}
                 gitClicked={() => onIconClicked(icons.git)}
                 whatsappClicked={() => onIconClicked(icons.whatsApp)}
-                />            
+            />
             <div className={showModal ? "showBackDrop backDrop" : "hideBackDrop backDrop"}></div>
         </>
     )

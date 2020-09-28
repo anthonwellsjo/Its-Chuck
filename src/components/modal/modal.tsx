@@ -6,7 +6,7 @@ interface Props {
     click: any,
     header: string,
     children: string,
-    element?: HTMLElement
+    element?: JSX.Element
 }
 
 
