@@ -60,7 +60,7 @@ export default function Home() {
                     speechSynthesis.cancel();
                     updateChuckConsole("speechSynthesis.cancel()");
                     setChuck(prev => ({ ...prev, isAngry: true }));
-                    updateChuckConsole("chuck.isAngry = true");
+                    updateChuckConsole(`chuck.angryLevel = ${100 / 4 * (chuckInteger + 1)}%`);
                     hasCalmedDown = false
                 } else if (chuck.isAngry) {
                     updateChuckConsole("Can't click while Chuck is angry.")
@@ -140,7 +140,6 @@ export default function Home() {
             console.log("on angrrryyyyyyyyyyy end event!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             if (!chuck.walkAway) {
                 setChuck(prev => ({ ...prev, isAngry: false }))
-                updateChuckConsole("chuck.isAngry = false");
                 updateChuckConsole("chuck.isAngry = false");
                 hasCalmedDown = true;
             } if (chuck.walkAway) {

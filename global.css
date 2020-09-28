@@ -322,7 +322,7 @@ h5 {
 @media (min-width: 526px) {
   .chuckConsoleContainer {
     width: 50%;
-    height: 70px;
+    height: 100px;
   }
 }
 
@@ -332,7 +332,6 @@ h5 {
   background-color: black;
   overflow: hidden;
   transition: transform 0.3s;
-  z-index: 100;
 }
 
 .consoleCloseBtn {
